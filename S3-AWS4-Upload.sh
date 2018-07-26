@@ -41,19 +41,12 @@ HMAC-SHA256h(){
  printf "$DATA" | openssl dgst -binary -sha256 -mac HMAC -macopt "hexkey:$KEY" | od -An -vtx1 | sed 's/[ \n]//g' | sed 'N;s/\n//'
 }
 
-
-AWS_SECRET_KEY=+6Rr11FinbuamENFw8tTtvyb0keRybkZWL2ntTbT
-AWS_ACCESS_KEY=AKIAJJKZUYHXYX3G3VUA
-
-BUCKET="sjmk-work"
 FILE_DATE=$(date +"%Y-%m-%dT%H-%M-%SZ")
-NAME_PRE_FIX=dump_
 BACKUP_FILENAME=$NAME_PRE_FIX$FILE_DATE$NAME_POST_FIX.tar.gz
-STARTS_WITH="mongo-backups/"$BACKUP_FILENAME
+STARTS_WITH=$BUCKET_PATH"/"$BACKUP_FILENAME
 FILE_TO_UPLOAD="/app/"$BACKUP_FILENAME
 
 REQUEST_TIME=$(date +"%Y%m%dT%H%M%SZ")
-REQUEST_REGION="eu-central-1"
 REQUEST_SERVICE="s3"
 REQUEST_DATE=$(printf "${REQUEST_TIME}" | cut -c 1-8)
 AWS4SECRET="AWS4"$AWS_SECRET_KEY
@@ -82,4 +75,4 @@ curl --silent \
 	-F "X-Amz-Signature="$SIGNATURE"" \
 	-F "file=@"$FILE_TO_UPLOAD http://$BUCKET.s3.amazonaws.com/
 
-rm -rf ./dump ./$BACKUP_FILENAME
+rm -rf /app/dump /app/$BACKUP_FILENAME
