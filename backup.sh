@@ -64,8 +64,7 @@ UPLOAD_REQUEST=$(echo -en $UPLOAD_REQUEST |  sed "s/ //g")
 
 SIGNATURE=$(HMAC-SHA256h $(HMAC-SHA256h $(HMAC-SHA256h $(HMAC-SHA256h $(HMAC-SHA256s $AWS4SECRET $REQUEST_DATE ) $REQUEST_REGION) $REQUEST_SERVICE) "aws4_request") $UPLOAD_REQUEST)
 
-mongodump
-tar zcvf $BACKUP_FILENAME dump
+mongodump $MONGO_PORT $MONGO_HOST $MONGO_DB $MONGO_USERNAME $MONGO_PASSWORD >> /var/log/backup_cron.log 2>&1 && tar zcvf $BACKUP_FILENAME dump >> /var/log/backup_cron.log 2>&1
 
 curl -is \
 	-F "key=""$STARTS_WITH" \
