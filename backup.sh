@@ -26,6 +26,7 @@
 # Later on, you have to change this value.
 ###########################################################################################################
 
+echo "Backup started..." >> /var/log/backup_cron.log
 cd /app
 . env.sh
 
@@ -75,8 +76,8 @@ curl -is \
 	-F "x-amz-date="$REQUEST_TIME"" \
 	-F "Policy="$UPLOAD_REQUEST"" \
 	-F "X-Amz-Signature="$SIGNATURE"" \
-	-F "file=@"$FILE_TO_UPLOAD http://$BUCKET.s3.amazonaws.com/ >> $LOG_PATH/backup_cron.log
+	-F "file=@"$FILE_TO_UPLOAD http://$BUCKET.s3.amazonaws.com/ >> /var/log/backup_cron.log
 
 rm -rf ./dump ./$BACKUP_FILENAME
-du -hs >> $LOG_PATH/backup_cron.log
-echo $BACKUP_FILENAME" backuped" >> $LOG_PATH/backup_cron.log
+du -hs >> /var/log/backup_cron.log
+echo $BACKUP_FILENAME" backuped" >> /var/log/backup_cron.log
