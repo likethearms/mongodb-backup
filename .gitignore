@@ -1,1 +1,3 @@
 creds.txt
+env.sh
+backup_cron.log

@@ -1,4 +1,3 @@
-export CRON_TIME="* * * * *"
 echo "${CRON_TIME} /app/backup.sh" >> /app/crontab
 # # Add crontab file in the cron directory
 cp /app/crontab /etc/cron.d/mongo-backup-cron
@@ -14,4 +13,5 @@ touch /var/log/backup_cron.log
 
 cat /etc/cron.d/mongo-backup-cron
 # # Run the command on container startup
+cat /app/env.sh >> /var/log/backup_cron.log
 cron && tail -f /var/log/backup_cron.log
